@@ -1,7 +1,7 @@
 package com.mundanemeatballs.demo.mrsandwich.config;
 
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
-import com.mundanemeatballs.demo.mrsandwich.services.AuthPropertiesService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,13 +13,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value(value = "${auth0.apiAudience}")
+    private String apiAudience;
+    @Value(value = "${auth0.issuer}")
+    private String issuer;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         JwtWebSecurityConfigurer
-                .forHS256(
-                        AuthPropertiesService.INSTANCE.getClientId(),
-                        AuthPropertiesService.INSTANCE.getIssuer(),
-                        AuthPropertiesService.INSTANCE.getSecretKey().getBytes())
+                .forRS256(apiAudience, issuer)
                 .configure(http)
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
