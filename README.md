@@ -9,3 +9,11 @@ curl --request POST --url 'https://spuu.eu.auth0.com/oauth/token' --header 'cont
 ```
 curl -X GET -H "Authorization: Bearer _access_token_" -H "Cache-Control: no-cache" "http://localhost:8080/api/categories"
 ```
+
+### Set up postgres
+```
+sudo -u postgres createuser --interactive $USER
+sudo -u postgres createdb mrsandwich
+psql -d mrsandwich
+ALTER USER postgres with password 'postgres@321';
+```
